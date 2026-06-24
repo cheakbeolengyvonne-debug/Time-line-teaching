@@ -1,0 +1,150 @@
+import streamlit as st
+
+# Set page configuration
+st.set_page_config(
+    page_title="Timeline Explorer",
+    page_icon="⏳",
+    layout="centered"
+)
+
+# App Title and Introduction
+st.title("⏳ Timeline Explorer!")
+st.subheader("Master the art of reading and drawing timelines.")
+st.write("Perfect for Primary 3 to Primary 6 students to learn how history connects!")
+
+# Create tabs for Learning and Practicing
+tab1, tab2 = st.tabs(["📖 Learn Timelines", "🧠 Practice Quiz"])
+
+# ==========================================
+# TAB 1: LEARN SECTION
+# ==========================================
+with tab1:
+    st.header("What is a Timeline?")
+    st.write(
+        "A **timeline** is a visual tool that shows events in the order they happened (**chronological order**). "
+        "Think of it like a number line, but for history! It reads from **left to right** (or top to bottom)."
+    )
+    
+    st.info("💡 **Key Rule:** The older event is always on the left, and the newer event is on the right.")
+    
+    ### Visual Mock Timeline
+    st.subheader("Example: A Student's Day")
+    
+    # Simulating a visual timeline using columns
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        st.metric(label="7:00 AM", value="Wake Up")
+        st.caption("Start of the day")
+    with col2:
+        st.metric(label="7:30 AM", value="Breakfast")
+        st.caption("➡️ 30 mins later")
+    with col3:
+        st.metric(label="8:00 AM", value="School Starts")
+        st.caption("➡️ 30 mins later")
+    with col4:
+        st.metric(label="1:30 PM", value="Dismissal")
+        st.caption("➡️ 5.5 hours later")
+        
+    st.markdown("---")
+    
+    ### How to Draw a Timeline
+    st.subheader("🛠️ 3 Steps to Draw a Perfect Timeline")
+    st.markdown(
+        """
+        1. **Draw a straight line:** Put arrows on both ends to show time keeps going.
+        2. **Plot your tick marks:** Keep the spacing even if the time gaps are equal.
+        3. **Label your events:** Write the **date/time** next to the tick mark, and the **event** right above or below it.
+        """
+    )
+
+# ==========================================
+# TAB 2: PRACTICE QUIZ SECTION
+# ==========================================
+with tab2:
+    st.header("Test Your Timeline Skills!")
+    st.write("Answer the questions below to see if you are a Timeline Master.")
+    
+    # Track score
+    score = 0
+    
+    # ------------------------------------------
+    # Question 1: Reading a Timeline
+    # ------------------------------------------
+    st.subheader("Question 1: Reading intervals")
+    st.markdown(
+        """
+        Look at this timeline of invention years:
+        * **1876:** Telephone invented
+        * **1879:** Lightbulb invented
+        * **1903:** First Airplane flight
+        """
+    )
+    
+    q1_answer = st.radio(
+        "How many years passed between the invention of the Telephone and the Lightbulb?",
+        ["Select an answer...", "2 years", "3 years", "4 years", "27 years"],
+        key="q1"
+    )
+    
+    if q1_answer == "3 years":
+        st.success("🎉 Correct! 1879 minus 1876 equals 3 years.")
+        score += 1
+    elif q1_answer != "Select an answer...":
+        st.error("❌ Try again! Subtract the older year (1876) from the newer year (1879).")
+
+    st.markdown("---")
+
+    # ------------------------------------------
+    # Question 2: Chronological Order
+    # ------------------------------------------
+    st.subheader("Question 2: Sequencing Events")
+    st.write("You want to put these historical events on a timeline from **Left to Right**:")
+    st.write("A) World War II ends (1945) | B) First Moon Landing (1969) | C) World War I ends (1918)")
+    
+    q2_answer = st.selectbox(
+        "What is the correct order from left to right?",
+        ["Select an answer...", "A ➡️ B ➡️ C", "C ➡️ B ➡️ A", "C ➡️ A ➡️ B", "B ➡️ A ➡️ C"],
+        key="q2"
+    )
+    
+    if q2_answer == "C ➡️ A ➡️ B":
+        st.success("🎉 Awesome job! 1918 comes first, then 1945, then 1969.")
+        score += 1
+    elif q2_answer != "Select an answer...":
+        st.error("❌ Not quite. Remember, the earliest year goes on the far left!")
+
+    st.markdown("---")
+
+    # ------------------------------------------
+    # Question 3: Interval Problem Solving (P5/P6 level)
+    # ------------------------------------------
+    st.subheader("Question 3: Elapsed Time (Advanced)")
+    st.write("A school sports day starts at **08:45 AM**. The timeline shows it lasts for exactly **3 hours and 30 minutes**.")
+    
+    q3_answer = st.time_input(
+        "What time does the sports day end?",
+        value=None,
+        key="q3"
+    )
+    
+    # Check if user put 12:15
+    if q3_answer is not None:
+        if q3_answer.hour == 12 and q3_answer.minute == 15:
+            st.success("🎉 Brilliant! 8:45 AM + 3 hours = 11:45 AM. Add 30 more minutes = 12:15 PM.")
+            score += 1
+        else:
+            st.error("❌ Incorrect. Hint: Add 3 hours first to 08:45, then add the remaining 30 minutes!")
+
+    st.markdown("---")
+    
+    # ------------------------------------------
+    # Score Summary & Celebration
+    # ------------------------------------------
+    st.subheader("🏆 Your Score")
+    st.write(f"You got **{score} out of 3** questions correct.")
+    
+    if score == 3:
+        st.balloons()
+        st.success("👑 Perfect Score! You are an official Timeline Master!")
+    elif score > 0:
+        st.info("Good effort! Review the 'Learn' tab and try to get a perfect score!")
